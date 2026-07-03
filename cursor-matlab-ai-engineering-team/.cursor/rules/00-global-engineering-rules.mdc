@@ -1,4 +1,9 @@
-﻿# Global Engineering Rules (All Agents)
+﻿---
+description: Global safety, quality, and traceability rules that apply to every role in the MATLAB/Simulink AI engineering team.
+alwaysApply: true
+---
+
+# Global Engineering Rules (All Agents)
 
 ## Role
 Global safety, quality, and traceability rules applied to all agents.

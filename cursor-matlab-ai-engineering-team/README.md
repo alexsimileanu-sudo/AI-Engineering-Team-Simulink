@@ -17,7 +17,8 @@ It provides role-based agents, strict engineering boundaries, anti-hallucination
 ## Repository Contents
 
 - `AGENTS.md` — team operating model
-- `.cursor/rules/*.mdc` — Cursor Project Rules per agent
+- `.cursor/rules/*.mdc` — Cursor Project Rules per agent (persona/boundaries, auto-attached by description; carry no model binding)
+- `.cursor/agents/*.md` — Cursor Subagents per agent (same persona, plus the actual per-role model binding — this is the only Cursor mechanism that supports `model:`)
 - `workflows/*.md` — operational procedures
 - `checklists/*.md` — practical engineering checklists
 - `templates/*.md` — reusable reporting/planning templates
@@ -27,13 +28,16 @@ It provides role-based agents, strict engineering boundaries, anti-hallucination
 1. Copy `AGENTS.md` into your project root.
 2. Copy `.cursor/rules/` into your project root at:
    - `<project-root>/.cursor/rules/`
-3. Copy `workflows/`, `checklists/`, and `templates/` into your project root (recommended).
+3. Copy `.cursor/agents/` into your project root at:
+   - `<project-root>/.cursor/agents/`
+4. Copy `workflows/`, `checklists/`, and `templates/` into your project root (recommended).
 
 ### Minimal install
 
 - Required:
   - `AGENTS.md`
   - `.cursor/rules/*.mdc`
+  - `.cursor/agents/*.md` (required for model binding to actually take effect)
 - Optional but recommended:
   - `workflows/`
   - `checklists/`
@@ -44,10 +48,11 @@ It provides role-based agents, strict engineering boundaries, anti-hallucination
 Copy to:
 - `<your-matlab-project-root>/AGENTS.md`
 
-## Where to Copy .cursor/rules
+## Where to Copy .cursor/rules and .cursor/agents
 
 Copy to:
 - `<your-matlab-project-root>/.cursor/rules/`
+- `<your-matlab-project-root>/.cursor/agents/`
 
 ## How to Use Each Agent in Cursor Chat
 
@@ -123,16 +128,23 @@ Use explicit role invocation in prompts:
 
 ## Recommended Model Usage
 
-- **Strong model**:
+Model binding is set in each `.cursor/agents/*.md` file's `model:` frontmatter field (Cursor Project Rules in `.cursor/rules/*.mdc` have no model field — they only carry persona/boundaries text). Invoke a role by its exact subagent name (`/project-lead`, `/matlab-expert`, etc.) to guarantee the bound model is used; natural-language or automatic delegation is not guaranteed to pick the intended subagent.
+
+- **Claude Sonnet 5** (`claude-sonnet-5`):
   - Project Lead
+  - MATLAB Expert
   - Simulink Developer
   - Stateflow Specialist
-  - Test Engineer
-- **Cheaper model**:
-  - Documentation Agent
+  - Test Engineer (default)
+- **Gemini 3.5 Flash** (`gemini-3.5-flash`):
   - Requirements Engineer
-- **Strongest model only**:
-  - Final Code Reviewer pass
+  - Documentation Agent
+- **GPT-5.5** (`gpt-5.5`):
+  - Code Reviewer
+- **Claude Opus 4.8** (`claude-opus-4-8`), on-demand escalation only:
+  - `test-engineer-gap-analysis` — invoke explicitly when Test Engineer coverage is ambiguous or contested; not used automatically.
+
+Exact model ID strings should be double-checked against Cursor's own model picker/autocomplete in your account, since Cursor's published docs mix dot- and dash-separated slugs across model families (e.g. `gpt-5.5` vs `claude-opus-4-8`) and don't publish a single canonical list.
 
 ## Engineering Safety Principles (Always On)
 
